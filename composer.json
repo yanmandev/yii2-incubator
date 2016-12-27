@@ -1,0 +1,35 @@
+{
+    "name": "yanpapayan/yii2-incubator",
+    "description": "Component for work with API Incubator is written in Yii2",
+    "type": "yii2-extension",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Yan Kuznetsov",
+            "email": "yankuznecov@ya.ru",
+            "homepage": "https://github.com/yanpapayan",
+            "role": "Developer"
+        }
+    ],
+    "keywords": [
+        "yii2",
+        "incubator",
+        "yii2-extension"
+    ],
+    "homepage": "https://github.com/yanpapayan/yii2-incubator",
+    "support": {
+        "issues": "https://github.com/yanpapayan/yii2-incubator/issues",
+        "source": "https://github.com/yanpapayan/yii2-incubator"
+    },
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=5.4.0",
+        "yiisoft/yii2": "~2",
+        "guzzlehttp/guzzle": "~6"
+    },
+    "autoload": {
+        "psr-4": {
+            "yanpapayan\\incubator\\": "./src"
+        }
+    }
+}
