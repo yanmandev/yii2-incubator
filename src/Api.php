@@ -12,6 +12,7 @@ namespace yanpapayan\incubator;
 use Guzzle\Http\Client;
 use yanpapayan\incubator\events\DepositEvent;
 use yii\base\Component;
+use yii\base\InvalidParamException;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 
@@ -123,6 +124,15 @@ class Api extends Component
     }
 
     /**
+     * @param $value
+     * @return float
+     */
+    private function prepareSum($value)
+    {
+        return round($value, 2);
+    }
+
+    /**
      * Performs api call
      *
      * @param string $action Api script name
@@ -140,8 +150,14 @@ class Api extends Component
         $client = $this->httpClient;
         $client->setBaseUrl(self::BASE_API_URL . '/' . $action);
         $request = $client->post(null, [], ArrayHelper::merge($defaults, $params))->send();
+        $response = $request->getBody(true);
 
-        $result = Json::decode($request->getBody(true));
+        try {
+            $result = Json::decode($response);
+        } catch (InvalidParamException $e) {
+            $result = $response;
+        }
+
         $errors = self::getErrors();
         if (is_string($result) && isset($errors[$result])) {
             throw new \Exception('Incubator API error: ' . ArrayHelper::getValue($errors, $result));
@@ -155,7 +171,7 @@ class Api extends Component
      * @param $username
      * @return string
      */
-    protected function encodeOperationId($operationId, $username)
+    public function encodeOperationId($operationId, $username)
     {
         return md5($operationId . ':' . $username);
     }
@@ -220,7 +236,7 @@ class Api extends Component
         $data = [
             'code' => $this->encodeOperationId($operationId, $username),
             'username' => $username,
-            'sum' => $sum,
+            'sum' => $this->prepareSum($sum),
             'currency' => $currency,
             'payment_system' => $paymentSystem,
         ];
@@ -249,8 +265,8 @@ class Api extends Component
         $data = [
             'code' => $this->encodeOperationId($operationId, $username),
             'username' => $username,
-            'sum' => $sum,
-            'sum_w_commission' => $sumWithCommission,
+            'sum' => $this->prepareSum($sum),
+            'sum_w_commission' => $this->prepareSum($sumWithCommission),
             'currency' => $currency,
             'payment_system' => $paymentSystem,
         ];
@@ -284,9 +300,9 @@ class Api extends Component
             'code' => $this->encodeOperationId($operationId, $username),
             'username' => $username,
             'referral' => $referral,
-            'sum' => $sum,
+            'sum' => $this->prepareSum($sum),
             'percent' => $percent,
-            'referralSum' => $referralSum,
+            'referralSum' => $this->prepareSum($referralSum),
             'currency' => $currency,
             'payment_system' => $paymentSystem,
         ];
@@ -308,7 +324,7 @@ class Api extends Component
         $data = [
             'code' => $this->encodeOperationId($operationId, $username),
             'username' => $username,
-            'sum' => $sum,
+            'sum' => $this->prepareSum($sum),
             'currency' => $currency,
             'payment_system' => $paymentSystem,
         ];
@@ -330,7 +346,7 @@ class Api extends Component
         $data = [
             'code' => $this->encodeOperationId($operationId, $username),
             'username' => $username,
-            'sum' => $sum,
+            'sum' => $this->prepareSum($sum),
             'currency' => $currency,
             'payment_system' => $paymentSystem,
         ];
