@@ -16,6 +16,11 @@ use yii\base\InvalidParamException;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 
+/**
+ * Class Api
+ * @package yanpapayan\incubator
+ * @author Ian Kuznetsov <yankuznecov@ya.ru>
+ */
 class Api extends Component
 {
     const BASE_API_URL = 'https://incubator.expert/api';
