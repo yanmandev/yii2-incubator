@@ -25,6 +25,12 @@ class Api extends Component
 {
     const BASE_API_URL = 'https://incubator.expert/api';
 
+    const SYSTEM_ACCOUNT_1 = 'inc_InvestExpert';
+    const SYSTEM_ACCOUNT_2 = 'inc_InvestExpert1';
+
+    const PROJECT_TYPE_DEFAULT = 'default';
+    const PROJECT_TYPE_MATRIX = 'matrix';
+
     const MESSAGE_OK = 'ok';
 
     const ERROR_AUTH = 'error_auth';
@@ -67,6 +73,9 @@ class Api extends Component
 
     /** @var string The password to access the API */
     public $accountKey;
+
+    /** @var string Type project may be DEFAULT or MATRIX */
+    public $projectType = self::PROJECT_TYPE_DEFAULT;
 
     /** @var Client */
     protected $httpClient;
@@ -192,7 +201,12 @@ class Api extends Component
             'pagination' => $pagination,
         ];
 
-        return $this->call('check.php', $data);
+        $action = 'check.php';
+        if ($this->projectType === self::PROJECT_TYPE_MATRIX) {
+            $action = 'check_matrix.php';
+        }
+
+        return $this->call($action, $data);
     }
 
     /**
@@ -210,7 +224,12 @@ class Api extends Component
             'check' => $check,
         ];
 
-        return $this->call('get_users.php', $data);
+        $action = 'get_users.php';
+        if ($this->projectType === self::PROJECT_TYPE_MATRIX) {
+            $action = 'get_users_matrix.php';
+        }
+
+        return $this->call($action, $data);
     }
 
     /**
